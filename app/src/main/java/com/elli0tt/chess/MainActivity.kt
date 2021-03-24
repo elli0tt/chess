@@ -2,7 +2,7 @@ package com.elli0tt.chess
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import com.elli0tt.chess.custom_view.BoardView
+import com.elli0tt.chess.databinding.ActivityMainBinding
 import com.elli0tt.chess.model.CellModel
 import com.elli0tt.chess.model.CellType
 import com.elli0tt.chess.model.PieceColor
@@ -75,10 +75,13 @@ class MainActivity : AppCompatActivity() {
         whiteKingsRow
     )
 
+    private lateinit var binding: ActivityMainBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
-        findViewById<BoardView>(R.id.board_view).setCurrentPiecesPositions(defaultPiecePositions)
+        binding.boardView.setCurrentPiecesPositions(defaultPiecePositions)
     }
 }
