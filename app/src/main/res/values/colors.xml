@@ -10,4 +10,5 @@
 
     <color name="white_cell">#f0d9b5</color>
     <color name="black_cell">#b58863</color>
+    <color name="possible_move_dot_fill_color">#00e676</color>
 </resources>

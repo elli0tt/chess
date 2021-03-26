@@ -12,6 +12,7 @@ import com.elli0tt.chess.R
 import com.elli0tt.chess.model.CellModel
 import com.elli0tt.chess.model.CellType
 import com.elli0tt.chess.model.PieceColor
+import com.elli0tt.chess.model.Position
 
 class CellView @JvmOverloads constructor(
     context: Context,
@@ -19,18 +20,18 @@ class CellView @JvmOverloads constructor(
     defStyleAttr: Int = 0
 ) : FrameLayout(context, attrs, defStyleAttr) {
 
+    companion object {
+        const val NO_DRAWABLE_ID = -1
+    }
+
     private val cellSize = resources.getDimension(R.dimen.board_cell_size)
     private val pieceSize = resources.getDimension(R.dimen.piece_size)
 
-    var column: Int = 0
+    var position: Position = Position(0, 0)
         set(value) {
             field = value
-            translationY = (cellSize * value)
-        }
-    var row: Int = 0
-        set(value) {
-            field = value
-            translationX = (cellSize * value)
+            translationY = (cellSize * value.column)
+            translationX = (cellSize * value.row)
         }
 
     init {
@@ -56,10 +57,10 @@ class CellView @JvmOverloads constructor(
 
     @DrawableRes
     private fun getCellPieceDrawableId(cellModel: CellModel): Int {
-        return if (cellModel.pieceColor == PieceColor.WHITE) {
-            getWhitePieceDrawableId(cellModel.cellType)
-        } else {
-            getBlackPieceDrawableId(cellModel.cellType)
+        return when (cellModel.pieceColor) {
+            PieceColor.WHITE -> getWhitePieceDrawableId(cellModel.cellType)
+            PieceColor.BLACK -> getBlackPieceDrawableId(cellModel.cellType)
+            PieceColor.NONE -> R.drawable.ic_possible_move_dot
         }
     }
 
@@ -72,7 +73,7 @@ class CellView @JvmOverloads constructor(
             CellType.BISHOP -> R.drawable.ic_white_bishop
             CellType.QUEEN -> R.drawable.ic_white_queen
             CellType.KING -> R.drawable.ic_white_king
-            else -> 0
+            else -> NO_DRAWABLE_ID
         }
     }
 
@@ -85,7 +86,7 @@ class CellView @JvmOverloads constructor(
             CellType.BISHOP -> R.drawable.ic_black_bishop
             CellType.QUEEN -> R.drawable.ic_black_queen
             CellType.KING -> R.drawable.ic_black_king
-            else -> 0
+            else -> NO_DRAWABLE_ID
         }
     }
 }

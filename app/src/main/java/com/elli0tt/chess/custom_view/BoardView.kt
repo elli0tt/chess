@@ -8,13 +8,19 @@ import androidx.core.content.ContextCompat
 import com.elli0tt.chess.BoardUtil
 import com.elli0tt.chess.R
 import com.elli0tt.chess.model.CellModel
-import com.elli0tt.chess.model.CellType
+import com.elli0tt.chess.model.Position
 
 class BoardView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
 ) : ConstraintLayout(context, attrs, defStyleAttr) {
+
+    fun interface OnCellClickListener {
+        fun onCellClick(position: Position)
+    }
+
+    var onCellClickListener: OnCellClickListener? = null
 
     @ColorInt
     private val blackCellColor = ContextCompat.getColor(context, R.color.black_cell)
@@ -29,11 +35,13 @@ class BoardView @JvmOverloads constructor(
     private fun drawEmptyBoard() {
         for (column in 0 until BoardUtil.COLUMNS_COUNT) {
             for (row in 0 until BoardUtil.ROWS_COUNT) {
-                CellView(context).also {
-                    it.setColor(getCellColor(column, row))
-                    it.column = column
-                    it.row = row
-                    addView(it)
+                CellView(context).also { cellView ->
+                    cellView.setColor(getCellColor(column, row))
+                    cellView.position = Position(column, row)
+                    cellView.setOnClickListener {
+                        onCellClickListener?.onCellClick(cellView.position)
+                    }
+                    addView(cellView)
                 }
             }
         }
